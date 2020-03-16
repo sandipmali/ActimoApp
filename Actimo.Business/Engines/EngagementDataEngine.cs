@@ -1,10 +1,14 @@
 ﻿using Actimo.Business.DataProvider;
 using Actimo.Business.Engines.Interfaces;
+using Actimo.Business.Models;
 using Actimo.Business.Services;
 using Actimo.Data.Accesor.Repository.Interface;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace Actimo.Business.Engines
@@ -30,6 +34,15 @@ namespace Actimo.Business.Engines
         {
             try
             {
+                var contactLink = GetContactLink(inputDataProvider.ApiUriService,
+                    inputDataProvider.Client.ActimoApikey,
+                    inputDataProvider.Client.ActimoDummyMessageId, inputDataProvider.Client.ActimoManagerContactId);
+
+                var keyCode = new Uri(contactLink).AbsolutePath;
+
+                GetContactAuthContact(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, keyCode);
+                //var auth = GetContactAuthContact(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, contactLink);
+
                 //var apiService = inputDataProvider.ApiUriService;
 
                 //var contacts = GetContactLink(apiService, inputDataProvider.Client.ActimoApikey);
@@ -47,17 +60,36 @@ namespace Actimo.Business.Engines
             }
         }
 
-        public string GetContactAuthContact(string keyCode)
+        public string GetContactAuthContact(ApiUriService apiService, string actimoApikey, string keyCode)
         {
-            throw new NotImplementedException();
+            var response = restClientService.ExecuteAsync(apiService.BaseUri,
+                    string.Format(apiService.ContactAuthApiUri, keyCode), actimoApikey,
+                     Method.GET)
+                    .GetAwaiter()
+                    .GetResult();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception("Request issue -> HTTP code:" + response.StatusCode);
+
+            var data = ObjectConversionService.ToObject<JObject>(response.Content);
+            return data["contactAuthCode"].Value<string>();
         }
 
-        public string GetContactLink(int messageId, int sourceId)
+        public string GetContactLink(ApiUriService apiService, string actimoApikey, int messageId, int sourceId)
         {
-            throw new NotImplementedException();
+            var response = restClientService.ExecuteAsync(apiService.BaseUri,
+                    string.Format(apiService.ContactLinkApiUri, messageId, sourceId), actimoApikey,
+                     Method.GET)
+                    .GetAwaiter()
+                    .GetResult();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception("Request issue -> HTTP code:" + response.StatusCode);
+
+            return ObjectConversionService.ToObject<ContactLinkModel>(response.Content)?.link;
         }
 
-        public void GetEngagementData(int targetId, int sourceId, string authCode)
+        public void GetEngagementData(ApiUriService apiService, string actimoApikey, int targetId, int sourceId, string authCode)
         {
             throw new NotImplementedException();
         }

@@ -10,12 +10,14 @@ namespace Actimo.Business.DataFactory
         private IEnumerable<IDataEngine> dataEngines;
 
         public ActimoDataFactory(IContactDataEngine contactDataEngine,
-            IContactMangerDataEngine contactMangerDataEngine)
+            IContactMangerDataEngine contactMangerDataEngine,
+            IEngagementDataEngine engagementDataEngine)
         {
             dataEngines = new List<IDataEngine>
             {
                 contactDataEngine,
-                contactMangerDataEngine
+                contactMangerDataEngine,
+                engagementDataEngine
             };
         }
 

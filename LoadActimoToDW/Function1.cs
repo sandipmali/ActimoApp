@@ -36,7 +36,9 @@ namespace LoadActimoToDW
             }
             catch (Exception ex)
             {
-                log.LogError("Error!!", ex);
+                log.LogError($"Error!! {ex.Message}");
+                log.LogError($"{ex.InnerException?.Message}");
+                log.LogError($"{ex.StackTrace}");
             }
 
         }

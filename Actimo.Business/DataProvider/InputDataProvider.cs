@@ -12,18 +12,18 @@ namespace Actimo.Business.DataProvider
         private readonly IClientLookupRepository clientLookupRepository;
 
         public InputDataProvider(IClientLookupRepository clientLookupRepository)
-        {            
+        {
             this.clientLookupRepository = clientLookupRepository;
         }
 
         public ApiUriService ApiUriService => GetResourceApiUris();
 
-        private ApiUriService GetResourceApiUris()
-        {
-            return new ApiUriService(Environment.GetEnvironmentVariable("baseUri"),
+        private ApiUriService GetResourceApiUris() => new ApiUriService(Environment.GetEnvironmentVariable("baseUri"),
             Environment.GetEnvironmentVariable("contactApiUri"),
-            Environment.GetEnvironmentVariable("contactManagerApiUri"));
-        }
+            Environment.GetEnvironmentVariable("contactManagerApiUri"),
+            Environment.GetEnvironmentVariable("contactLinkApiUri"),
+            Environment.GetEnvironmentVariable("contactAuthApiUri"),
+            Environment.GetEnvironmentVariable("enagementApiUri"));
 
         public Client Client => GetClient();
 
