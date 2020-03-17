@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -40,17 +41,9 @@ namespace Actimo.Business.Engines
 
                 var keyCode = new Uri(contactLink).AbsolutePath;
 
-                GetContactAuthContact(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, keyCode);
-                //var auth = GetContactAuthContact(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, contactLink);
+                var authCode = GetContactAuthContact(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, keyCode);
 
-                //var apiService = inputDataProvider.ApiUriService;
-
-                //var contacts = GetContactLink(apiService, inputDataProvider.Client.ActimoApikey);
-
-                //var dtContacts = ObjectConversionService.ToDataTable(contacts);
-
-                //if (dtContacts?.Rows.Count > 0)
-                //    PushContacts(inputDataProvider.Client.ClientId, dtContacts);
+                GetEngagementData(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, inputDataProvider.Client.ActimoManagerContactId, inputDataProvider.Client.ActimoManagerContactId, authCode);
 
             }
             catch (Exception ex)
@@ -91,7 +84,43 @@ namespace Actimo.Business.Engines
 
         public void GetEngagementData(ApiUriService apiService, string actimoApikey, int targetId, int sourceId, string authCode)
         {
-            throw new NotImplementedException();
+            var response = restClientService.ExecuteAsync(apiService.BaseUri,
+                    string.Format(apiService.EnagementApiUri, targetId, sourceId, authCode), actimoApikey,
+                     Method.GET)
+                    .GetAwaiter()
+                    .GetResult();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception("Request issue -> HTTP code:" + response.StatusCode);
+
+            var data = ObjectConversionService.ToObject<RootObject>(response.Content);
+
+            var enagementList = new List<EnagementModel>();
+
+            foreach (var item in data.data)
+            {
+                var reportInsightMappingResult = item.reports.Select((i) => new ReportInsightMapping()
+                {
+                    id = i.id,
+                    insightsValues = i.insightsValues
+                });
+
+                foreach (var result in reportInsightMappingResult)
+                {
+                    var enagagementData = result.insightsValues.Select(i => new EnagementModel()
+                    {
+                        id = result.id,
+                        type = i.type,
+                        key = i.key,
+                        value = i.value,
+                        upperThreshold = i.upperThreshold,
+                        lowerThreshold = i.lowerThreshold,
+                        suffix = i.suffix
+                    });
+
+                    enagementList.AddRange(enagagementData);
+                }
+            }
         }
     }
 }

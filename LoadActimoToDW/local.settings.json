@@ -7,7 +7,7 @@
     "contactApiUri": "/contacts",
     "contactManagerApiUri": "/contacts/{0}/relationships",
     "contactLinkApiUri": "/messages/{0}/contactLink/{1}",
-    "contactAuthApiUri": "/viewer/{0}",
+    "contactAuthApiUri": "/viewer{0}",
     "enagementApiUri": "/contacts/{0}/profile?sourceId={1}&sourceAuthCode={2}",
     "ConnectionString": "", //Add Db connection string here
     "ClientId": 1
