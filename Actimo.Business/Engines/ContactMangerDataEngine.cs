@@ -54,13 +54,15 @@ namespace Actimo.Business.Engines
             {
                 var getContacts = contactRepository.
                                 GetContacts(inputDataProvider.Client.ClientId)
-                                .GetAwaiter().GetResult();
+                                .GetAwaiter().GetResult()?.ToList();
 
-                if (getContacts?.Any() == false) throw new Exception("No Contacts Data Found!!");
+                if (getContacts?.Any() == false)
+                    throw new Exception("No Contacts Data Found!!");
 
                 foreach (var contact in getContacts)
                 {
-                    var contactManagerList = GetContactManagerList(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, contact.Id);
+                    var contactManagerList = GetContactManagerList(inputDataProvider.ApiUriService,
+                        inputDataProvider.Client.ActimoApikey, contact.Id);
 
                     var contactsManager = ObjectConversionService.ToDataTable(contactManagerList);
 

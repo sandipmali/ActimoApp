@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Actimo.Business", "Actimo.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Actimo.Data.Accesor", "Actimo.Data.Accesor\Actimo.Data.Accesor.csproj", "{E0F0685B-F649-49C1-B52B-147ACF63AF0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadActimoToDW", "LoadActimoToDW\LoadActimoToDW.csproj", "{EB1AD731-6280-48E7-847E-ECC1D691B84D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadActimoToDW", "LoadActimoToDW\LoadActimoToDW.csproj", "{EB1AD731-6280-48E7-847E-ECC1D691B84D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

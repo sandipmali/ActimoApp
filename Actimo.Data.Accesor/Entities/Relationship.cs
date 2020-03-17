@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Actimo.Data.Accesor.Entities
+﻿namespace Actimo.Data.Accesor.Entities
 {
-    public partial class ContactManager
+    public partial class Relationship
     {
         public int? ClientId { get; set; }
         public string ContactManagerId { get; set; }
