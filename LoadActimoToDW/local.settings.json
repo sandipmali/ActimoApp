@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "baseUri": "https://app.actimo.com/api/v1",
+    "contactApiUri": "/contacts",
+    "contactManagerApiUri": "/contacts/{0}/relationships",
+    "contactLinkApiUri": "/messages/{0}/contactLink/{1}",
+    "contactAuthApiUri": "/viewer/{0}",
+    "enagementApiUri": "/contacts/{0}/profile?sourceId={1}&sourceAuthCode={2}",
+    "ConnectionString": "", //Add Db connection string here
+    "ClientId": 1
+  }
+}
