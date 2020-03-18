@@ -37,6 +37,7 @@ namespace LoadActimoToDW
             builder.Services.AddScoped<IClientLookupRepository, ClientLookupRepository>();
             builder.Services.AddScoped<IContactRepository, ContactRepository>();
             builder.Services.AddScoped<IRelationshipRepository, RelationshipRepository>();
+            builder.Services.AddScoped<IEngagementRepository, EngagementRepository>();
         }
     }
 }
