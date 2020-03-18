@@ -3,14 +3,15 @@ using Actimo.Business.Engines.Interfaces;
 using Actimo.Business.Models;
 using Actimo.Business.Services;
 using Actimo.Data.Accesor.Repository.Interface;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace Actimo.Business.Engines
 {
@@ -43,7 +44,14 @@ namespace Actimo.Business.Engines
 
                 var authCode = GetContactAuthContact(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, keyCode);
 
-                GetEngagementData(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, inputDataProvider.Client.ActimoManagerContactId, inputDataProvider.Client.ActimoManagerContactId, authCode);
+                var engagementData = GetEngagementData(inputDataProvider.ApiUriService, inputDataProvider.Client.ActimoApikey, inputDataProvider.Client.ActimoManagerContactId, inputDataProvider.Client.ActimoManagerContactId, authCode);
+
+                var engagementTable = ObjectConversionService.ToDataTable(engagementData);
+
+                if (engagementTable?.Rows.Any() == false)
+                    throw new Exception("No engagement data found");
+
+                PushEngagementData(inputDataProvider.Client.ClientId, engagementTable);
 
             }
             catch (Exception ex)
@@ -82,7 +90,7 @@ namespace Actimo.Business.Engines
             return ObjectConversionService.ToObject<ContactLinkModel>(response.Content)?.link;
         }
 
-        public void GetEngagementData(ApiUriService apiService, string actimoApikey, int targetId, int sourceId, string authCode)
+        public List<EnagementModel> GetEngagementData(ApiUriService apiService, string actimoApikey, int targetId, int sourceId, string authCode)
         {
             var response = restClientService.ExecuteAsync(apiService.BaseUri,
                     string.Format(apiService.EnagementApiUri, targetId, sourceId, authCode), actimoApikey,
@@ -95,7 +103,12 @@ namespace Actimo.Business.Engines
 
             var data = ObjectConversionService.ToObject<RootObject>(response.Content);
 
-            var enagementList = new List<EnagementModel>();
+            return GetEngagementList(data);
+        }
+
+        private List<EnagementModel> GetEngagementList(RootObject data)
+        {
+            var engagementList = new List<EnagementModel>();
 
             foreach (var item in data.data)
             {
@@ -107,7 +120,7 @@ namespace Actimo.Business.Engines
 
                 foreach (var result in reportInsightMappingResult)
                 {
-                    var enagagementData = result.insightsValues.Select(i => new EnagementModel()
+                    var engagements = result.insightsValues.Select(i => new EnagementModel()
                     {
                         id = result.id,
                         type = i.type,
@@ -118,9 +131,17 @@ namespace Actimo.Business.Engines
                         suffix = i.suffix
                     });
 
-                    enagementList.AddRange(enagagementData);
+                    engagementList.AddRange(engagements);
                 }
             }
+
+            return engagementList;
+        }
+
+        public void PushEngagementData(int clientId, DataTable engagementTable)
+        {
+            engagementRepository.PushEngagementDataAsync(clientId, engagementTable)
+                .GetAwaiter().GetResult();
         }
     }
 }
