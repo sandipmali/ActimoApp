@@ -2,7 +2,7 @@
 
 namespace Actimo.Business.Models
 {
-    public class ContactMangerModel
+    public class RelationshipModel
     {
         public int? contactId { get; set; }
         public string type { get; set; }        
@@ -10,9 +10,9 @@ namespace Actimo.Business.Models
         public string contactType { get; set; }
     }
 
-    public class ContactMangerRoot
+    public class RelationshipRoot
     {
         public string status { get; set; }
-        public List<ContactMangerModel> data { get; set; }
+        public List<RelationshipModel> data { get; set; }
     }
 }

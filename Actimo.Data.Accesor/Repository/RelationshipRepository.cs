@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Actimo.Data.Accesor.Repository
 {
-    public class ContactManagerRepository : RepositoryBase<Relationship>, IContactManagerRepository
+    public class RelationshipRepository : RepositoryBase<Relationship>, IRelationshipRepository
     {
         private readonly DWContext repositoryContext;
 
-        public ContactManagerRepository(DWContext repositoryContext) : base(repositoryContext)
+        public RelationshipRepository(DWContext repositoryContext) : base(repositoryContext)
         {
             this.repositoryContext = repositoryContext;
         }

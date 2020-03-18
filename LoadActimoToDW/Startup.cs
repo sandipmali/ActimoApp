@@ -24,7 +24,7 @@ namespace LoadActimoToDW
             builder.Services.AddScoped<IDataFeedManager, DataFeedManager>();
             builder.Services.AddScoped<IInputDataProvider, InputDataProvider>();
             builder.Services.AddScoped<IContactDataEngine, ContactDataEngine>();
-            builder.Services.AddScoped<IContactMangerDataEngine, ContactMangerDataEngine>();
+            builder.Services.AddScoped<IRelationshipDataEngine, RelationshipDataEngine>();
             builder.Services.AddScoped<IEngagementDataEngine, EngagementDataEngine>();
 
             builder.Services.AddScoped<IActimoDataFactory, ActimoDataFactory>();
@@ -36,7 +36,7 @@ namespace LoadActimoToDW
 
             builder.Services.AddScoped<IClientLookupRepository, ClientLookupRepository>();
             builder.Services.AddScoped<IContactRepository, ContactRepository>();
-            builder.Services.AddScoped<IContactManagerRepository, ContactManagerRepository>();
+            builder.Services.AddScoped<IRelationshipRepository, RelationshipRepository>();
         }
     }
 }

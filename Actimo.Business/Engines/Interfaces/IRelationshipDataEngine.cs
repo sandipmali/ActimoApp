@@ -7,10 +7,9 @@ using System.Text;
 
 namespace Actimo.Business.Engines.Interfaces
 {
-    public interface IContactMangerDataEngine : IDataEngine
+    public interface IRelationshipDataEngine : IDataEngine
     {
-        List<ContactMangerModel> GetContactManagerList(ApiUriService apiUriService, string actimoApikey, int contactId);
+        List<RelationshipModel> GetContactManagerList(ApiUriService apiUriService, string actimoApikey, int contactId);
         void PushContactsManager(int clientId, int contactId, DataTable contactsManager);
-
     }
 }

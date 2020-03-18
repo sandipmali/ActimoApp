@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Actimo.Data.Accesor.Repository.Interface
 {
-    public interface IContactManagerRepository
+    public interface IRelationshipRepository
     {
         Task PushContactsManagerAsync(int clientId, int contactId, DataTable contactsManager);
     }

@@ -13,27 +13,27 @@ using System.Net;
 
 namespace Actimo.Business.Engines
 {
-    public class ContactMangerDataEngine : IContactMangerDataEngine
+    public class RelationshipDataEngine : IRelationshipDataEngine
     {
         private readonly IRestClientService restClientService;
-        private readonly ILogger<ContactMangerDataEngine> logger;
+        private readonly ILogger<RelationshipDataEngine> logger;
         private readonly IContactRepository contactRepository;
-        private readonly IContactManagerRepository contactManagerRepository;
+        private readonly IRelationshipRepository relationshipRepository;
 
         public DataType dataType => DataType.ContactManager;
 
-        public ContactMangerDataEngine(IRestClientService restClientService,
-            ILogger<ContactMangerDataEngine> logger,
+        public RelationshipDataEngine(IRestClientService restClientService,
+            ILogger<RelationshipDataEngine> logger,
             IContactRepository contactRepository,
-            IContactManagerRepository contactManagerRepository)
+            IRelationshipRepository relationshipRepository)
         {
             this.restClientService = restClientService;
             this.logger = logger;
             this.contactRepository = contactRepository;
-            this.contactManagerRepository = contactManagerRepository;
+            this.relationshipRepository = relationshipRepository;
         }
 
-        public List<ContactMangerModel> GetContactManagerList(ApiUriService apiService, string actimoApikey, int contactId)
+        public List<RelationshipModel> GetContactManagerList(ApiUriService apiService, string actimoApikey, int contactId)
         {
             var response = restClientService.ExecuteAsync(apiService.BaseUri,
                     string.Format(apiService.ContactManagerApiUri, contactId), actimoApikey,
@@ -44,8 +44,8 @@ namespace Actimo.Business.Engines
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception("Request issue -> HTTP code:" + response.StatusCode);
 
-            return ObjectConversionService.ToObject<ContactMangerRoot>(response.Content)?.data
-                ?? new List<ContactMangerModel>();
+            return ObjectConversionService.ToObject<RelationshipRoot>(response.Content)?.data
+                ?? new List<RelationshipModel>();
         }
 
         public void FeedData(IInputDataProvider inputDataProvider)
@@ -78,7 +78,7 @@ namespace Actimo.Business.Engines
 
         public void PushContactsManager(int clientId, int contactId, DataTable contactsManager)
         {
-            contactManagerRepository.PushContactsManagerAsync(clientId, contactId, contactsManager)
+            relationshipRepository.PushContactsManagerAsync(clientId, contactId, contactsManager)
                 .GetAwaiter().GetResult();
         }
     }
