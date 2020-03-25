@@ -44,10 +44,11 @@ namespace Actimo.Data.Accesor.Entities
         public string Data18 { get; set; }
         public string Data19 { get; set; }
         public string Data20 { get; set; }
-        public bool? OptOut { get; set; } 
-        public string CreatedAt { get; set; }
+        public bool? OptOut { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public string CreatedBy { get; set; }
-        public string UpdatedAt { get; set; }
-        public string LastActive { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? LastActive { get; set; }
+        public bool? Active { get; set; }
     }
 }

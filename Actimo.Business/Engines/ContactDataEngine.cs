@@ -66,9 +66,9 @@ namespace Actimo.Business.Engines
             }
         }
 
-        public void PushContacts(int clientID, DataTable contacts)
+        public void PushContacts(int clientId, DataTable contacts)
         {
-            contactRepository.PushContactsAsync(clientID, contacts)
+            contactRepository.PushContactsAsync(clientId, contacts)
                   .GetAwaiter().GetResult();
         }
     }

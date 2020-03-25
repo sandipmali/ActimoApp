@@ -1,7 +1,5 @@
-﻿using System;
-using Actimo.Data.Accesor.Entities;
+﻿using Actimo.Data.Accesor.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Actimo.Data.Accesor
 {
@@ -23,6 +21,7 @@ namespace Actimo.Data.Accesor
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {  
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -92,8 +91,7 @@ namespace Actimo.Data.Accesor
                     .HasMaxLength(100);
 
                 entity.Property(e => e.CreatedAt)
-                    .HasColumnName("created_at")
-                    .HasMaxLength(100);
+                    .HasColumnName("created_at");
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnName("created_by")
@@ -198,14 +196,15 @@ namespace Actimo.Data.Accesor
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.LastActive)
-                    .HasColumnName("last_active")
-                    .HasMaxLength(100);
+                    .HasColumnName("last_active");
 
                 entity.Property(e => e.LastName)
                     .HasColumnName("last_name")
                     .HasMaxLength(100);
 
                 entity.Property(e => e.OptOut).HasColumnName("opt_out");
+
+                entity.Property(e => e.Active).HasColumnName("Active");
 
                 entity.Property(e => e.PhoneNumber)
                     .HasColumnName("phone_number")
@@ -216,8 +215,8 @@ namespace Actimo.Data.Accesor
                     .HasMaxLength(100);
 
                 entity.Property(e => e.UpdatedAt)
-                    .HasColumnName("updated_at")
-                    .HasMaxLength(100);
+                    .HasColumnName("updated_at");
+                   
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
             });

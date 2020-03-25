@@ -2,6 +2,7 @@
 using Actimo.Business.DataProvider;
 using Microsoft.Extensions.Logging;
 using System;
+using Actimo.Data.Accesor.Repository.Interface;
 
 namespace Actimo.Business.Managers
 {
@@ -9,25 +10,35 @@ namespace Actimo.Business.Managers
     {
         private readonly IActimoDataFactory actimoDataFactory;
         private readonly ILogger<DataFeedManager> logger;
+        private readonly IClientLookupRepository clientLookupRepository;
 
-        public DataFeedManager(IActimoDataFactory actimoDataFactory, ILogger<DataFeedManager> logger)
+        public DataFeedManager(IActimoDataFactory actimoDataFactory,
+            ILogger<DataFeedManager> logger,
+            IClientLookupRepository clientLookupRepository)
         {
             this.actimoDataFactory = actimoDataFactory;
             this.logger = logger;
+            this.clientLookupRepository = clientLookupRepository;
         }
+
         public void CreateFeed(IInputDataProvider inputDataProvider)
         {
-            //Execute Feed
+            //Execute Feed per client
             try
             {
-                ExecuteFeed(inputDataProvider);
+                var clients = clientLookupRepository.GetClients();
+
+                foreach (var client in clients)
+                {
+                    inputDataProvider.Client = client;
+                    ExecuteFeed(inputDataProvider);
+                }
             }
             catch (Exception ex)
             {
                 logger.LogError(ex.Message, ex);
-                throw ex;
+                throw;
             }
-
         }
 
         private void ExecuteFeed(IInputDataProvider inputDataProvider)

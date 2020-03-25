@@ -9,7 +9,6 @@
     "contactLinkApiUri": "/messages/{0}/contactLink/{1}",
     "contactAuthApiUri": "/viewer{0}",
     "enagementApiUri": "/contacts/{0}/profile?sourceId={1}&sourceAuthCode={2}",
-    "ConnectionString": "", //Add Db connection string here
-    "ClientId": 1
+    "ConnectionString": "Server=INPUN2-D3BX28Q2\\SQLEXPRESS;Database=DW;Trusted_Connection=True;" //Add Db connection string here
   }
 }

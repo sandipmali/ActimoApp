@@ -7,6 +7,7 @@ namespace Actimo.Data.Accesor.Repository.Interface
 {
     public interface IClientLookupRepository
     {
-        public Client GetClient(int id);
+        Client GetClient(int id);
+        IEnumerable<Client> GetClients();
     }
 }

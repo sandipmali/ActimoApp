@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Actimo.Business.Models
 {
@@ -45,10 +44,11 @@ namespace Actimo.Business.Models
         public string data19 { get; set; }
         public string data20 { get; set; }
         public bool? opt_out { get; set; }
-        public string created_at { get; set; }
+        public DateTime? created_at { get; set; }
         public string created_by { get; set; }
-        public string updated_at { get; set; }
-        public string last_active { get; set; }
+        public DateTime? updated_at { get; set; }
+        public DateTime? last_active { get; set; }
+        public bool? active { get; set; }
     }
 
     public class ContactRoot
