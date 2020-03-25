@@ -20,7 +20,7 @@ namespace Actimo.Business.Engines
         private readonly IContactRepository contactRepository;
         private readonly IRelationshipRepository relationshipRepository;
 
-        public DataType dataType => DataType.ContactManager;
+        public DataType dataType => DataType.Relationship;
 
         public RelationshipDataEngine(IRestClientService restClientService,
             ILogger<RelationshipDataEngine> logger,
@@ -33,7 +33,7 @@ namespace Actimo.Business.Engines
             this.relationshipRepository = relationshipRepository;
         }
 
-        public List<RelationshipModel> GetContactManagerList(ApiUriService apiService, string actimoApikey, int contactId)
+        public List<RelationshipModel> GetRelationshipList(ApiUriService apiService, string actimoApikey, int contactId)
         {
             var response = restClientService.ExecuteAsync(apiService.BaseUri,
                     string.Format(apiService.ContactManagerApiUri, contactId), actimoApikey,
@@ -56,19 +56,22 @@ namespace Actimo.Business.Engines
                                 GetContacts(inputDataProvider.Client.ClientId)
                                 .GetAwaiter().GetResult()?.ToList();
 
-                if (getContacts?.Any() == false)
+                if (getContacts != null)
+
+                    foreach (var contact in getContacts)
+                    {
+                        var relationshipList = GetRelationshipList(inputDataProvider.ApiUriService,
+                            inputDataProvider.Client.ActimoApikey, contact.Id);
+
+                        var relationshipDataTable = ObjectConversionService.ToDataTable(relationshipList);
+
+                        if (relationshipDataTable?.Rows.Count > 0)
+                            PushRelationship(inputDataProvider.Client.ClientId, contact.Id, relationshipDataTable);
+                    }
+
+                else
                     throw new Exception("No Contacts Data Found!!");
 
-                foreach (var contact in getContacts)
-                {
-                    var contactManagerList = GetContactManagerList(inputDataProvider.ApiUriService,
-                        inputDataProvider.Client.ActimoApikey, contact.Id);
-
-                    var contactsManager = ObjectConversionService.ToDataTable(contactManagerList);
-
-                    if (contactsManager?.Rows.Count > 0)
-                        PushContactsManager(inputDataProvider.Client.ClientId, contact.Id, contactsManager);
-                }
             }
             catch (Exception ex)
             {
@@ -76,9 +79,9 @@ namespace Actimo.Business.Engines
             }
         }
 
-        public void PushContactsManager(int clientId, int contactId, DataTable contactsManager)
+        public void PushRelationship(int clientId, int contactId, DataTable relationshipDataTable)
         {
-            relationshipRepository.PushContactsManagerAsync(clientId, contactId, contactsManager)
+            relationshipRepository.PushRelationshipAsync(clientId, contactId, relationshipDataTable)
                 .GetAwaiter().GetResult();
         }
     }

@@ -11,14 +11,17 @@ namespace Actimo.Business.Managers
         private readonly IActimoDataFactory actimoDataFactory;
         private readonly ILogger<DataFeedManager> logger;
         private readonly IClientLookupRepository clientLookupRepository;
+        private readonly IDmRepository dmRepository;
 
         public DataFeedManager(IActimoDataFactory actimoDataFactory,
             ILogger<DataFeedManager> logger,
-            IClientLookupRepository clientLookupRepository)
+            IClientLookupRepository clientLookupRepository,
+            IDmRepository dmRepository)
         {
             this.actimoDataFactory = actimoDataFactory;
             this.logger = logger;
             this.clientLookupRepository = clientLookupRepository;
+            this.dmRepository = dmRepository;
         }
 
         public void CreateFeed(IInputDataProvider inputDataProvider)
@@ -33,6 +36,9 @@ namespace Actimo.Business.Managers
                     inputDataProvider.Client = client;
                     ExecuteFeed(inputDataProvider);
                 }
+
+                //Exec DM.LoadDM Sp
+                dmRepository.Load();
             }
             catch (Exception ex)
             {

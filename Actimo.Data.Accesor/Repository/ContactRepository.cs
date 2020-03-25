@@ -42,7 +42,7 @@ namespace Actimo.Data.Accesor.Repository
                 };
 
                 await repositoryContext.Database.OpenConnectionAsync();
-                await repositoryContext.Database.ExecuteSqlRawAsync("EXEC [dbo].[InsertToMirror_ActimoContact] @clientId, @contacts", clientidParameter, parameter);
+                await repositoryContext.Database.ExecuteSqlRawAsync("EXEC [Mirror].[InsertToMirror_ActimoContact] @clientId, @contacts", clientidParameter, parameter);
 
             }
             catch (Exception ex)

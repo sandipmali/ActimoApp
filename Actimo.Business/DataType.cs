@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Actimo.Business
+﻿namespace Actimo.Business
 {
     public enum DataType
     {
         Contacts,
-        ContactManager,
+        Relationship,
         Engagement
     }
 }

@@ -17,7 +17,7 @@ namespace Actimo.Data.Accesor.Repository
             this.repositoryContext = repositoryContext;
         }
 
-        public async Task PushContactsManagerAsync(int clientId, int contactId, DataTable contactsManager)
+        public async Task PushRelationshipAsync(int clientId, int contactId, DataTable relationshipDataTable)
         {
             try
             {
@@ -33,12 +33,12 @@ namespace Actimo.Data.Accesor.Repository
 
                 var parameter = new SqlParameter("@Relationship", SqlDbType.Structured)
                 {
-                    Value = contactsManager,
+                    Value = relationshipDataTable,
                     TypeName = "Mirror.Relationship_TableType"
                 };
 
                 await repositoryContext.Database.OpenConnectionAsync();
-                await repositoryContext.Database.ExecuteSqlRawAsync("EXEC InsertToMirror_ActimoRelationship @clientId, @ContactID, @Relationship", clientidParameter, contactIdParameter, parameter);
+                await repositoryContext.Database.ExecuteSqlRawAsync("EXEC [Mirror].[InsertToMirror_ActimoRelationship] @clientId, @ContactID, @Relationship", clientidParameter, contactIdParameter, parameter);
 
             }
             catch (Exception ex)

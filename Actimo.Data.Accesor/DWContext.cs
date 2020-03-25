@@ -16,7 +16,7 @@ namespace Actimo.Data.Accesor
 
         public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<Contact> Contact { get; set; }
-        public virtual DbSet<Relationship> ContactManager { get; set; }
+        public virtual DbSet<Relationship> Relationship { get; set; }
         public virtual DbSet<Engagement> Engagement { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
